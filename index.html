@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style>
+      body {
+        font-family: 'Courier New', Courier, monospace;
+        font-weight: bold;
+      }
+      .header {
+        padding: 2%;
+      }
+      .pet-name {
+        font-size: 32px;
+        height: 40px;
+        height: 40px;
+        color:black;
+        background-color:rgb(236, 176, 9);
+        display: grid;
+        justify-items: center;
+        align-items: center;
+        border-radius: 8px;
+      } 
+      .description{
+        font-size: 15px;
+        height: 40px;
+        height: 40px;
+        color:black;
+        background-color:rgb(240, 238, 143);
+        display: grid;
+        justify-items: center;
+        align-items: center;
+        border-radius: 8px;
+      } 
+      .main {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+      }
+      .image-area {
+        background-color: #4797c9;
+        display: grid;
+        justify-items: center;
+      }
+      .pet-image {
+        height: 500px;
+        max-width: 100%;
+        padding: 3rem;
+      }
+      .interactive-area {
+        background-color: #D8BFD8;
+        display: grid;
+        align-items: center;
+        justify-items: center;
+      }
+      .activity-row {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        width: 90%;
+        padding: 0 1rem;
+        align-items: center;
+      }
+      .activity-icon {
+        height: 50px;
+        height: 50px;
+      }
+      .activity-button {
+        background-color: #BA55D3;
+        border-radius: 8px;
+        box-shadow: 0 0 5px 0 grey;
+        color: white;
+        cursor: pointer;
+        height: 100%;
+        display: grid;
+        justify-items: center;
+        align-items: center;
+      }
+      .hidden {
+        display: none;
+      }
+    
+      body {
+  background-color: lightgreen
+}
+
+    </style>
+  </head>
+  <body>
+    <div class="header">
+      <div class="pet-name">Jake the Dog</div>
+      <div class="description">He is a chill dude.</div>
+    </div>
+    <div class="main">
+      <div class="image-area">
+        <img id="pet-image" class="pet-image" src='neutral.gif' />
+    </div>
+    <div class="interactive-area">
+       
+      <div id="food-row" class="activity-row">
+        <img class="activity-icon" src="food.png" />
+        <div id="food-stat" class="activity-stat">50</div>
+        <div class="activity-button" onclick="giveFood()">Eat sandwich</div>
+      </div>
+      <div id="water-row" class="activity-row">
+        <img class="activity-icon" src="water.png" />
+        <div id="water-stat" class="activity-stat">50</div>
+        <div class="activity-button" onclick="giveWater()">Drink water</div>
+      </div>
+      <div id="exercise-row" class="activity-row">
+        <img class="activity-icon" src="exercise.png" />
+        <div id="exercise-stat" class="activity-stat">50</div>
+        <div class="activity-button" onclick="giveExercise()">Exercise</div>
+      </div>
+
+      <div id="end-game" class="end-game hidden">
+        <div class="message">
+          Your pet has passed out.
+        </div>
+        <div class="activity-button restart-button" onclick="restart()">
+          Restart
+        </div>
+      </div>
+      <audio src="music/Island-Song.mp3" controls autoplay>
+        <p>If you are reading this, it is because your browser does not support this awesome audio track.</p>
+      </audio>
+      </div>
+    </div>
+  </body>
+  <script>
+    
+    var hasNotPassedOut = true
+
+    var food = 50
+    var water = 50
+    var exercise = 50
+
+     var giveFood = () => {
+      food = food + 15
+      water = water - 5
+      exercise = exercise - 5
+
+      updateHTML()
+    }
+
+    var giveWater = () => {
+      water = water + 15
+      food = food - 5
+      exercise = exercise - 2
+
+      updateHTML()
+    }
+
+    var giveExercise = () => {
+      exercise = exercise + 30
+      water = water - 15
+      food = food - 10
+
+      updateHTML()
+    }
+
+    var updateHTML = () => {
+      document.getElementById("food-stat").innerHTML = food
+      document.getElementById("water-stat").innerHTML = water
+      document.getElementById("exercise-stat").innerHTML = exercise
+
+      var lowestStat = Math.min(food, water, exercise)
+      var imageSrc
+
+      if (lowestStat <= 0) {
+        imageSrc = 'passed-out.gif'
+        if (hasNotPassedOut) {
+          toggleInteractivity()
+          hasNotPassedOut = false
+      }
+      } else if (lowestStat < 25) {
+        imageSrc = 'tired.gif'
+      } else if (lowestStat < 75) {
+        imageSrc = 'neutral.gif'
+      } else if (lowestStat < 150) {
+        imageSrc = 'upbeat.gif'
+      } else {
+        imageSrc = 'exuberant.gif'
+      }
+
+    document.getElementById("pet-image").src = imageSrc
+    }
+
+    var agePet = () => {
+      water = water - 8
+      food = food - 4
+      exercise = exercise - 2
+      updateHTML()
+    }
+
+    setInterval(agePet, 2000)
+
+    var toggleInteractivity = () => {
+      document.getElementById("food-row").classList.toggle("hidden")
+      document.getElementById("water-row").classList.toggle("hidden")
+      document.getElementById("exercise-row").classList.toggle("hidden")
+      document.getElementById("end-game").classList.toggle("hidden")
+    }
+
+    var restart = () => {
+      food = 50
+      water = 50
+      exercise = 50
+      hasNotPassedOut = true
+      toggleInteractivity()
+      updateHTML()
+    }
+
+  </script>
+</html>
